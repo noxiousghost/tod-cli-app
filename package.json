@@ -1,4 +1,7 @@
 {
+  "bin": {
+    "todo": "./dist/index.js"
+  },
   "name": "todo-cli-app",
   "version": "0.0.1",
   "description": "A cli based todo application made using node js and typescript",
@@ -6,7 +9,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node ./dist/index.js",
-    "dev": "nodemon --files ./src/index.ts",
+    "dev": "ts-node ./src/index.ts",
     "prettier": "prettier --write \"src/**/*.ts\"",
     "prettier:check": "prettier --check \"src/**/*.ts\"",
     "lint": "eslint \"src/**/*.ts\" --fix",
@@ -51,5 +54,9 @@
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "uuid": "^11.0.2"
   }
 }
