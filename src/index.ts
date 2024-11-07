@@ -1,25 +1,51 @@
-#!/usr/bin/env node
-
 import { Command } from 'commander';
+import { ITask, taskStatus } from './interface/task.interface';
+import { v4 as uuidv4 } from 'uuid';
+import path from 'path';
+import fs from 'fs';
 
 const program = new Command();
 
 program
-  .name('TODO CLI APP')
-  .version('0.0.1')
-  .description('Create and view your tasks from the comfort of your terminal');
+  .name('todo-cli')
+  .description('Manage your most important tasks from the comfort of your terminal')
+  .version('1.0.0');
+
 program
-  .command('test')
-  .description('Run a test command')
-  .action(() => {
-    console.log('Todo CLI is working!');
+  .command('add')
+  .description('Add a new task')
+  .requiredOption('-n, --name <string>', 'Task name')
+  .requiredOption('-d, --deadline <string>', 'Task deadline (YYYY-MM-DD)')
+  .option('-t, --tags <tags...>', 'List of tags')
+  .action((options) => {
+    const newTask: ITask = {
+      id: uuidv4(),
+      name: options.name,
+      deadline: new Date(options.deadline),
+      status: taskStatus.todo,
+      tags: options.tags || [],
+      isArchived: false,
+    };
+
+    const filePath = path.resolve(__dirname, '../jsons/tasks.json');
+    fs.readFile(filePath, 'utf-8', (err, data) => {
+      let tasks: ITask[] = [];
+      if (!err && data.trim() !== '') {
+        try {
+          tasks = JSON.parse(data);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      tasks.push(newTask);
+      fs.writeFile(filePath, JSON.stringify(tasks, null, 2), 'utf-8', (err) => {
+        if (err) {
+          console.error('Error writing task:', err);
+        } else {
+          console.log('New task added:', newTask);
+        }
+      });
+    });
   });
 
 program.parse(process.argv);
-
-//take input from the command line
-// use app -- add
-
-// validate the input
-// if the input is valid save to the json file
-// else display list of error in the input fields
