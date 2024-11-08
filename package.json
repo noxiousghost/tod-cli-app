@@ -1,6 +1,6 @@
 {
   "bin": {
-    "todo": "./dist/index.js"
+    "todo-cli": "./dist/index.js"
   },
   "name": "todo-cli-app",
   "version": "0.0.1",
